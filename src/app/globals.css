@@ -3,16 +3,23 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
+  --background: #F8F8F8; /* Abu-abu terang */
   --foreground: #171717;
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: light) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #ffffff; /* Putih untuk mode gelap */
+    --foreground: #000000; /* Hitam untuk mode gelap */
   }
 }
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
 
 body {
   color: var(--foreground);

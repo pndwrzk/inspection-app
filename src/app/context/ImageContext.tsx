@@ -22,6 +22,8 @@ interface ImageContextType {
   sizePage: number;
   setPage: (page: number) => void;
   setSearch: (q: string) => void;
+  totalPage: number;
+ 
 }
 
 const ImageContext = createContext<ImageContextType | undefined>(undefined);
@@ -31,10 +33,12 @@ export function ImageProvider({ children }: { children: ReactNode }) {
   const [page, setPage] = useState<number>(1);
   const [sizePage, setSizePage] = useState<number>(12);
   const [search, setSearch] = useState<string>("");
+  const [totalPage, setTotalPage] = useState<number>(0);
 
   async function fetchImages() {
       const response = await getImages({ page, page_size: sizePage ,search});
       setImages(response.data);
+      setTotalPage(response.meta?.total_page || 0);
   }
 
   useEffect(() => {
@@ -66,7 +70,9 @@ export function ImageProvider({ children }: { children: ReactNode }) {
       sizePage,
       setPage,
       setSizePage,
-      setSearch
+      setSearch,
+      totalPage,
+      
     }),
     [images, page, sizePage]
   );

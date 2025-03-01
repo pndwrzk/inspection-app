@@ -7,6 +7,11 @@ export type ImagesUpload = {
 
 export type ImagesResponse = ApiResponse & {
     data: ImageData[];
+    meta?: {
+    limit: number;
+    offset: number;
+    total_page: number;
+    }
   };
 
   export type ImageResponse = ApiResponse & {

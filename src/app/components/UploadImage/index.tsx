@@ -8,14 +8,13 @@ import ProgresBarUpload from "./ProgresBarUpload";
 import { IMAGE_TYPE_LIST, MAX_SIZE_IMAGE } from "@/constants";
 import { AlertInformation } from "@/app/components/commons/AlertInformation";
 
-import  {Loading}  from "@/app/components/commons/Load";
+import { Loading } from "@/app/components/commons/Load";
 import { useImage } from "@/app/context/ImageContext";
-
 
 export default function UploadImage() {
   const [progress, setProgress] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { addImage} = useImage();
+  const { addImage } = useImage();
   const {
     register,
     control,
@@ -74,11 +73,11 @@ export default function UploadImage() {
   };
 
   const onSubmit = async (data: { items: ImagesUpload[] }) => {
-    setIsLoading(true)
+    setIsLoading(true);
     await addImage(data.items);
     reset();
-  
-    setIsLoading(false)
+
+    setIsLoading(false);
   };
 
   return (
@@ -87,9 +86,10 @@ export default function UploadImage() {
         <div className="w-full md:w-2/5 border-r p-4 md:p-8">
           <div className="flex flex-col  h-full">
             <div className="text-center">
-              <h1 className="font-bold text-2xl">Upload Files</h1>
-              <p className="text-gray-500 text-sm">
-                Upload your user-downloadable files.
+              <h1 className="font-bold text-2xl">Upload Photo</h1>
+              <p className="text-gray-500 text-sm mt-3">
+                Upload unlimited photos to ensure detailed and accurate
+                inspection reports.
               </p>
             </div>
             <div className="flex flex-1 items-center justify-center">
@@ -142,9 +142,9 @@ export default function UploadImage() {
                 <ProgresBarUpload progress={progress} />
 
                 {!fields.length && !progress && (
-                  <p className="text-black text-sm text-center mt-5">
-                    You haven't added any images yet. Let's get started!
-                  </p>
+                  <h3 className=" text-gray-500  text-center mt-5">
+                  No images have been added yet. Start uploading to enhance your inspection report!
+                  </h3>
                 )}
 
                 {fields.map((field, index) => (

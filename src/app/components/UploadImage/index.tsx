@@ -1,19 +1,26 @@
 "use client";
-import { ImagesUpload } from "@/app/types";
+import { ImagesUpload } from "@/app/types/image";
 import { useState } from "react";
 import { BsXLg } from "react-icons/bs";
 import { useForm, useFieldArray } from "react-hook-form";
 import { FaUpload } from "react-icons/fa";
 import ProgresBarUpload from "./ProgresBarUpload";
-import { IMAGE_TYPE_LIST, MAX_SIZE_IMAGE } from "@/app/constants";
+import { IMAGE_TYPE_LIST, MAX_SIZE_IMAGE } from "@/constants";
 import { AlertInformation } from "@/app/components/commons/AlertInformation";
+
+import  {Loading}  from "@/app/components/commons/Load";
+import { useImage } from "@/app/context/ImageContext";
+
 
 export default function UploadImage() {
   const [progress, setProgress] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { addImage} = useImage();
   const {
     register,
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<{ items: ImagesUpload[] }>({
     defaultValues: { items: [] },
@@ -66,8 +73,12 @@ export default function UploadImage() {
     reader.readAsDataURL(file);
   };
 
-  const onSubmit = (data: { items: ImagesUpload[] }) => {
-    console.log("Form submitted:", data);
+  const onSubmit = async (data: { items: ImagesUpload[] }) => {
+    setIsLoading(true)
+    await addImage(data.items);
+    reset();
+  
+    setIsLoading(false)
   };
 
   return (
@@ -188,9 +199,9 @@ export default function UploadImage() {
                   <div className="mb-[170px] md:mb-0">
                     <button
                       type="submit"
-                      className="w-full bg-[#9F0504] hover:bg-red-700 text-white font-bold py-2 mt-4 px-4 rounded-lg"
+                      className="w-full bg-[#9F0504] hover:bg-red-700 text-white font-bold py-2 mt-4 px-4 rounded-lg flex justify-center"
                     >
-                      Submit
+                      {isLoading ? <Loading /> : "Submit"}
                     </button>
                   </div>
                 )}

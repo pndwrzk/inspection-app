@@ -6,10 +6,11 @@ import {
   useEffect,
 } from "react";
 import { BsXLg } from "react-icons/bs";
+import type { ImageData } from "@/app/types/image"
 
 type ModalProps = {
   title: string;
-  image?: string;
+  image?: ImageData;
 };
 
 export type ModalHandle = {
@@ -71,7 +72,7 @@ const Modal = forwardRef<ModalHandle, ModalProps>(({ title, image }, ref) => {
     >
       <div onClick={(e) => e.stopPropagation()} className="flex flex-col gap-4">
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-semibold text-gray-800">{title}</h2>
+          <h2 className="text-2xl font-semibold text-gray-800">{image?.name}</h2>
           <button
             onClick={closeModal}
             className="text-gray-500 hover:text-gray-800 p-1 outline-none"
@@ -85,7 +86,7 @@ const Modal = forwardRef<ModalHandle, ModalProps>(({ title, image }, ref) => {
             onMouseMove={handleMouseMove}
           >
             <img
-              src={image}
+              src={image?.url}
               alt={title}
               className="w-full h-[300px] cursor-pointer object-cover rounded-lg shadow-md transition-transform duration-300 hover:scale-110"
               style={{

@@ -1,4 +1,12 @@
-export type ImagesUpload = {
-    name : string
-    image : string
+export interface ApiResponse {
+    status: string;
+    message: string;
+    
+  }
+
+
+export type PaggingParam ={
+    page: number;
+    page_size : number;
+    search :string;
 }

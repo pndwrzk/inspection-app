@@ -6,7 +6,7 @@ import { useForm, useFieldArray } from "react-hook-form";
 import { FaUpload } from "react-icons/fa";
 import ProgresBarUpload from "./ProgresBarUpload";
 import { IMAGE_TYPE_LIST, MAX_SIZE_IMAGE } from "@/app/constants";
-import { showAlert } from "@/utils/ShowAlert";
+import { AlertInformation } from "@/app/components/commons/AlertInformation";
 
 export default function UploadImage() {
   const [progress, setProgress] = useState<number>(0);
@@ -36,16 +36,16 @@ export default function UploadImage() {
         currentProgress += 10;
         setProgress(currentProgress);
 
-        if ( currentProgress === randomCheck) {
+        if (currentProgress === randomCheck) {
           if (file.size > MAX_SIZE_IMAGE) {
-            showAlert("Ukuran file maksimal 10MB.");
+            AlertInformation("Maximum file size is 10MB.");
             setProgress(0);
             clearInterval(interval);
             return;
           }
 
           if (!IMAGE_TYPE_LIST.includes(file.type)) {
-            showAlert("Hanya file PNG, JPG, atau JPEG yang diperbolehkan.");
+            AlertInformation("Only PNG, JPG, or JPEG files are allowed.");
             setProgress(0);
             clearInterval(interval);
             return;
@@ -162,7 +162,7 @@ export default function UploadImage() {
                     <div className="flex-1">
                       <label
                         htmlFor={`image-name-${field.id}`}
-                        className="block text-sm font-bold mb-2 pl-1"
+                        className="block text-md font-bold mb-2 pl-1"
                       >
                         Label
                       </label>
@@ -176,7 +176,7 @@ export default function UploadImage() {
                         placeholder="Enter image name"
                       />
                       {errors.items?.[index]?.name && (
-                        <p className="text-red-500 text-xs mt-1">
+                        <p className="text-[#9F0504] text-xs mt-1">
                           {errors.items[index].name.message}
                         </p>
                       )}
@@ -188,7 +188,7 @@ export default function UploadImage() {
                   <div className="mb-[170px] md:mb-0">
                     <button
                       type="submit"
-                      className="w-full bg-gray-800 hover:bg-black text-white font-bold py-2 mt-4 px-4 rounded-lg"
+                      className="w-full bg-[#9F0504] hover:bg-red-700 text-white font-bold py-2 mt-4 px-4 rounded-lg"
                     >
                       Submit
                     </button>

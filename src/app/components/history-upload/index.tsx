@@ -2,8 +2,10 @@
 import { useRef, useState } from "react";
 import { FaRegTrashAlt } from "react-icons/fa";
 import Modal from "./ModalImage";
+import AlertDialog, { AlertDialogHandle } from "@/app/components/commons/AlertDialog";
 
 export default function HistoryUpload() {
+  const dialogRef = useRef<AlertDialogHandle>(null);
   const modalRef = useRef<{ open: () => void; close: () => void }>(null);
   const [selectedImage, setSelectedImage] = useState<string | undefined>(undefined);
 
@@ -29,6 +31,7 @@ export default function HistoryUpload() {
 
   const handleTrashClick = (e: React.MouseEvent) => {
     e.stopPropagation();
+    dialogRef.current?.open()
     console.log("Trash clicked");
   };
 
@@ -55,7 +58,7 @@ export default function HistoryUpload() {
                 className="relative cursor-pointer rounded-lg overflow-hidden shadow-md hover:shadow-lg transition duration-300"
               >
                 <button
-                  className="absolute top-1 right-1 text-white p-1 flex items-center justify-center hover:font-bold z-10 pointer-events-auto"
+                  className="absolute top-1 right-1 text-gray-200 hover:text-white  p-1 flex items-center justify-center hover:font-bold z-10 pointer-events-auto"
                   aria-label="Cancel upload"
                   onClick={handleTrashClick}
                 >
@@ -72,6 +75,12 @@ export default function HistoryUpload() {
       </div>
 
       <Modal ref={modalRef} title="My Modal" image={selectedImage} />
+      <AlertDialog
+        ref={dialogRef}
+        title="Delete Item"
+        description="Are you sure you want to delete this item?"
+        onConfirm={() => alert("Confirmed!")}
+      />
     </>
   );
 }

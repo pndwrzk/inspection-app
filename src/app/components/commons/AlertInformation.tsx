@@ -45,7 +45,7 @@ const Alert: React.FC<Props> = ({ message, isSuccess }) => {
 };
 
 
-export const showAlert = (message: string, isSuccess: boolean = false) => {
+export const AlertInformation = (message: string, isSuccess: boolean = false) => {
   const alertContainer = document.createElement("div");
   document.body.appendChild(alertContainer);
 

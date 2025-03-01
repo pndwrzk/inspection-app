@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --background: #F8F8F8; /* Abu-abu terang */
+  --background: #f0f0f0; /* Abu-abu terang */
   --foreground: #171717;
 }
 

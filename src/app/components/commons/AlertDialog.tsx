@@ -81,4 +81,6 @@ const AlertDialog = forwardRef<AlertDialogHandle, AlertDialogProps>(
   }
 );
 
+AlertDialog.displayName = "AlertDialog";
+
 export default AlertDialog;

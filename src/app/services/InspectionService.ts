@@ -1,13 +1,15 @@
-import axios from "axios";
-import { ImagesUpload, ImagesResponse,ImageResponse } from "../types/image";
+
+import { ImagesUpload, ImagesResponse,ImageResponse, UpdateName } from "../types/image";
 import { PaggingParam } from "../types";
+import axios from "axios";
+import apiClient from "@/utils/AxiosConfig";
 
 export async function postImages(
   bodyRequest: ImagesUpload[]
 ): Promise<ImagesResponse> {
   try {
-    const response = await axios.post<ImagesResponse>(
-      `${process.env.NEXT_PUBLIC_INSPECTION_SERVICE}/images`,
+    const response = await apiClient.post<ImagesResponse>(
+      `/images`,
       bodyRequest
     );
     return response.data;
@@ -30,8 +32,8 @@ export async function getImages(
    params : PaggingParam
   ): Promise<ImagesResponse> {
     try {
-      const response = await axios.get<ImagesResponse>(
-        `${process.env.NEXT_PUBLIC_INSPECTION_SERVICE}/images?page=${params.page}&page_size=${params.page_size}&q=${params.search}`,
+      const response = await apiClient.get<ImagesResponse>(
+        `/images?page=${params.page}&page_size=${params.page_size}&q=${params.search}`,
       );
       return response.data;
     } catch (error) {
@@ -53,8 +55,33 @@ export async function getImages(
     id : number
    ): Promise<ImageResponse> {
      try {
-       const response = await axios.delete<ImageResponse>(
-         `${process.env.NEXT_PUBLIC_INSPECTION_SERVICE}/images/${id}`,
+       const response = await apiClient.delete<ImageResponse>(
+         `/images/${id}`,
+       );
+       return response.data;
+     } catch (error) {
+       if (axios.isAxiosError(error) && error.response) {
+         return error.response.data;
+       } else {
+         return {
+           status: "unknown error",
+           message: "unknown error",
+           data: null,
+         };
+       }
+     }
+   }
+
+
+
+   export async function updateNameIamge(
+    id : number,
+    bodyRequest: UpdateName
+   ): Promise<ImageResponse> {
+     try {
+       const response = await apiClient.patch<ImageResponse>(
+         `/images/${id}`,
+         bodyRequest,
        );
        return response.data;
      } catch (error) {

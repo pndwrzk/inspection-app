@@ -161,10 +161,10 @@ export default function UploadImage() {
                     </button>
 
                     {/* Image Placeholder */}
-                    <div className="w-16 h-16 flex items-center border-2 justify-center rounded-lg bg-gray-100  border-gray-800">
+                    <div className="w-20 h-20 flex items-center border-2 justify-center rounded-lg bg-gray-100  border-gray-800">
                       <img
                         src={field.image}
-                        alt=""
+                        alt="Image Preview"
                         className="w-full h-full object-cover rounded-lg"
                       />
                     </div>
@@ -173,7 +173,7 @@ export default function UploadImage() {
                     <div className="flex-1">
                       <label
                         htmlFor={`image-name-${field.id}`}
-                        className="block text-md font-bold mb-2 pl-1"
+                        className="block text-lg font-bold mb-2 pl-1"
                       >
                         Label
                       </label>
@@ -182,7 +182,12 @@ export default function UploadImage() {
                         type="text"
                         {...register(`items.${index}.name`, {
                           required: "Image name is required",
+                          minLength: {
+                            value: 3,
+                            message: "Image name must be at least 3 characters",
+                          },
                         })}
+                        
                         className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-700 focus:ring-2 focus:ring-gray-500 focus:border-gray-500 outline-none transition-all"
                         placeholder="Enter image name"
                       />

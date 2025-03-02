@@ -5,6 +5,10 @@ export type ImagesUpload = {
     image : string
 }
 
+
+export type UpdateName = {
+    name : string
+}
 export type ImagesResponse = ApiResponse & {
     data: ImageData[];
     meta?: {

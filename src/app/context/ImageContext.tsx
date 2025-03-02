@@ -6,8 +6,9 @@ import {
   useEffect,
   ReactNode,
   useMemo,
+  useCallback,
 } from "react";
-import { getImages, postImages,deleteImage as removeImage } from "../services/InspectionService";
+import { getImages, postImages,deleteImage as removeImage, updateNameIamge } from "../services/InspectionService";
 import { ImageData, ImagesUpload } from "@/app/types/image";
 import { AlertInformation } from "../components/commons/AlertInformation";
 
@@ -16,13 +17,14 @@ import { AlertInformation } from "../components/commons/AlertInformation";
 interface ImageContextType {
   images: ImageData[];
   addImage: (images: ImagesUpload[]) => Promise<ImageData[]>;
-  updateImage: (imageId: string, newUrl: string) => void;
+  updateImage: (imageId: number, newName: string) => void;
   deleteImage: (imageId: number) => void;
   page: number;
   sizePage: number;
   setPage: (page: number) => void;
   setSearch: (q: string) => void;
   totalPage: number;
+  isLoading: boolean;
  
 }
 
@@ -34,31 +36,43 @@ export function ImageProvider({ children }: { children: ReactNode }) {
   const [sizePage, setSizePage] = useState<number>(12);
   const [search, setSearch] = useState<string>("");
   const [totalPage, setTotalPage] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  async function fetchImages() {
-      const response = await getImages({ page, page_size: sizePage ,search});
+  const fetchImages = useCallback(async() => {
+    setIsLoading(true);
+    const response = await getImages({ page, page_size: sizePage ,search});
       setImages(response.data);
       setTotalPage(response.meta?.total_page || 0);
-  }
+      setIsLoading(false);
+      if(response.data === null){ 
+        AlertInformation(response.message);
+      }
+  }, [page, search, sizePage]); 
+
 
   useEffect(() => {
     fetchImages();
-  }, [page,search,sizePage]);
+  }, [fetchImages, page, search, sizePage]);
+  
 
-  const addImage = async (images: ImagesUpload[]): Promise<ImageData[]> => {
+  const addImage = useCallback(async (images: ImagesUpload[]): Promise<ImageData[]> => {
     const response = await postImages(images);
     await fetchImages();
     AlertInformation(response.message, response.data!==null);
     return response.data;
-  };
+  },[fetchImages]);
 
-  const updateImage = async (imageId: string, newUrl: string) => {};
+  const updateImage = useCallback(async (imageId: number, newName: string) => {
+    const response = await updateNameIamge(imageId, { name: newName });
+    await fetchImages();
+    AlertInformation(response.message, response.data!==null);
+  },[fetchImages]);
 
-  const deleteImage = async (imageId: number) => {
+  const deleteImage = useCallback(async (imageId: number) => {
     const response = await removeImage(imageId);
     await fetchImages();
     AlertInformation(response.message, response.data!==null);
-  };
+  },[fetchImages]);
 
   const value = useMemo(
     () => ({
@@ -72,10 +86,11 @@ export function ImageProvider({ children }: { children: ReactNode }) {
       setSizePage,
       setSearch,
       totalPage,
-      
+      isLoading
     }),
-    [images, page, sizePage]
+    [images, addImage, updateImage, deleteImage, page, sizePage, totalPage, isLoading]
   );
+  
 
   return (
     <ImageContext.Provider value={value}>{children}</ImageContext.Provider>
